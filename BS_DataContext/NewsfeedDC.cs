@@ -68,7 +68,7 @@ namespace BS_DataContext
             SqlCommand objDbCommand = new SqlCommand(vComTxt, connection);
             SqlDataReader dr;
             dr = objDbCommand.ExecuteReader();
-            if (dr.Read())
+            while (dr.Read())
             {
                 UserComment obj = new UserComment();
                 obj.CommentsCode = dr["CommentsCode"].ToString();

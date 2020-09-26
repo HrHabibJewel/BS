@@ -13,6 +13,8 @@ namespace BS_Models
         public string UserCode { get; set; }
         public string ActionType { get; set; }
         public string Comments { get; set; }
+        public string UserFullName { get; set; }
+
         public UserVote VotetypeList;
     }
 }

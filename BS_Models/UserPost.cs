@@ -12,6 +12,7 @@ namespace BS_Models
         public string UserCode { get; set; }
         public string ActionType { get; set; }
         public string Post { get; set; }
+        public string UserFullName { get; set; }
 
         public List<UserComment> CommentsList;
     }

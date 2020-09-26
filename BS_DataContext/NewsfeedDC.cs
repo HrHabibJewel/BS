@@ -22,8 +22,10 @@ namespace BS_DataContext
             List<UserPost> userPostList = new List<UserPost>();
            
 
-            string vComTxt = @"SELECT PostCode,UserCode,ActionDate,ActionType,Post
-                                FROM UserPost WHERE ActionType <> 'DELETE'";
+            string vComTxt = @"SELECT PostCode,P.UserCode,P.ActionDate,P.ActionType,Post,UserFullname
+                                FROM UserPost P
+								JOIN UserInfo U ON P.usercode = U.UserCode
+								WHERE P.ActionType <> 'DELETE' ORDER BY P.ActionDate DESC";
             
             SqlConnection connection = _habibDbContext.GetConn();
             connection.Open();
@@ -40,6 +42,7 @@ namespace BS_DataContext
                 objApplicationInfo.ActionDate = dr.GetDateTime(dr.GetOrdinal("ActionDate"));
                 objApplicationInfo.ActionType = dr["ActionType"].ToString();
                 objApplicationInfo.Post = dr["Post"].ToString();
+                objApplicationInfo.UserFullName = dr["UserFullname"].ToString();
                 objApplicationInfo.CommentsList = GetCommentByPostCode(objApplicationInfo.PostCode, connection);
                 userPostList.Add(objApplicationInfo);
                 
@@ -57,8 +60,10 @@ namespace BS_DataContext
             List<UserComment> commentList = new List<UserComment>();
             
 
-            string vComTxt = @"select CommentsCode,UserCode,ActionDate,ActionType,Comments,PostCode
-            from UserComments where PostCode = '"+pPostCode+"' AND ActionType <> 'DELETE'";
+            string vComTxt = @"select CommentsCode,C.UserCode,C.ActionDate,C.ActionType,Comments,PostCode,U.UserFullName
+            from UserComments C 
+			JOIN UserInfo U ON C.usercode = U.UserCode
+			where PostCode = '" + pPostCode + "' AND C.ActionType <> 'DELETE' ORDER BY C.ActionDate DESC";
 
             SqlCommand objDbCommand = new SqlCommand(vComTxt, connection);
             SqlDataReader dr;
@@ -72,6 +77,7 @@ namespace BS_DataContext
                 obj.ActionType = dr["ActionType"].ToString();
                 obj.Comments = dr["Comments"].ToString();
                 obj.PostCode = dr["PostCode"].ToString();
+                obj.UserFullName = dr["UserFullname"].ToString();
                 obj.VotetypeList = GetVotetypeByCommentsCode(obj.CommentsCode, connection);
                 commentList.Add(obj);
 
